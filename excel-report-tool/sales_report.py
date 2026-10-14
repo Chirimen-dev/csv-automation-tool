@@ -122,20 +122,20 @@ def main():
     monthly_png = OUTPUT_DIR / "monthly_sales.png"
     products_png = OUTPUT_DIR / "product_sales.png"
 
-    plt.figure(figsize=(8, 4.5))
+    plt.figure(figsize=(5, 3))
     plt.bar(monthly["月"], monthly["売上金額"])
-    plt.title("Monthly Sales")
-    plt.xlabel("Month")
-    plt.ylabel("Sales Amount")
+    plt.title("月別売上")
+    plt.xlabel("月")
+    plt.ylabel("売上金額（円）")
     plt.tight_layout()
     plt.savefig(monthly_png, dpi=150)
     plt.close()
 
-    plt.figure(figsize=(8, 4.5))
+    plt.figure(figsize=(5, 3))
     plt.bar(products["商品名"], products["売上金額"])
-    plt.title("Sales by Product")
-    plt.xlabel("Product")
-    plt.ylabel("Sales Amount")
+    plt.title("商品別売上")
+    plt.xlabel("商品名")
+    plt.ylabel("売上金額（円）")
     plt.tight_layout()
     plt.savefig(products_png, dpi=150)
     plt.close()
@@ -161,9 +161,29 @@ def main():
             sheet.column_dimensions[
                 get_column_letter(cells[0].column)
             ].width = min(width + 2, 30)
+    for row in wb["全売上データ"].iter_rows(min_row=2):
+        row[0].number_format = "yyyy/mm/dd"
+        row[2].number_format = '#,##0'
+        row[3].number_format = '"¥"#,##0'
+        row[4].number_format = '"¥"#,##0'
+
+    for sheet_name in ["月別売上", "商品別売上"]:
+        sheet = wb[sheet_name]
+        for row in sheet.iter_rows(min_row=2):
+            row[1].number_format = '"¥"#,##0'
+
+
+    for sheet_name in ["月別売上", "商品別売上"]:
+        sheet = wb[sheet_name]
+        for row in sheet.iter_rows(min_row=2):
+            row[1].number_format = '¥#,##0'
 
     wb["月別売上"].add_image(ExcelImage(str(monthly_png)), "D2")
     wb["商品別売上"].add_image(ExcelImage(str(products_png)), "D2")
+    wb["全売上データ"].column_dimensions["B"].width = 12
+    wb["全売上データ"].column_dimensions["D"].width = 12
+    wb["全売上データ"].column_dimensions["E"].width = 14
+    wb["月別売上"].column_dimensions["B"].width = 16
     wb.save(report_path)
 
     write_process_report(
