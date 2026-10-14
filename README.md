@@ -69,3 +69,55 @@
 
 処理結果は `output/merged.csv` に、処理件数などのレポートは `output/report.txt` に出力されます。
 
+---
+
+# Excel売上データ自動集計・レポート作成ツール
+
+複数のExcelファイルから売上データを読み込み、月別・商品別の集計とグラフ付きレポートの作成を自動化するPythonツールです。手作業による集計時間や入力ミスの削減を目的に作成しました。
+
+## 主な機能
+
+* 複数のExcelファイル（`.xlsx`）をまとめて読み込み
+* 列の順番が異なるファイルにも対応
+* 日付・数量・単価の不正なデータを検出して除外
+* 数量 × 単価による売上金額の計算
+* 月別・商品別の売上集計
+* 売上グラフの作成とExcelブックへの挿入
+* 処理件数やエラー内容をテキストレポートに出力
+
+## 使用技術
+
+* Python 3.12
+* pandas
+* openpyxl
+* matplotlib
+
+## 使い方
+
+1. 集計したいExcelファイルを `excel-report-tool/input/` に入れます。
+
+2. リポジトリのルートディレクトリで仮想環境を有効にします。
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+3. ツールを実行します。
+
+   ```bash
+   cd excel-report-tool
+   python sales_report.py
+   ```
+
+## 出力ファイル
+
+| ファイル                        | 内容                              |
+| --------------------------- | ------------------------------- |
+| `output/sales_report.xlsx`  | 全売上データ、月別・商品別集計、グラフを含むExcelレポート |
+| `output/process_report.txt` | 読み込んだファイル数、処理件数、除外データ、エラー内容など   |
+| `output/monthly_sales.png`  | 月別売上グラフ                         |
+| `output/product_sales.png`  | 商品別売上グラフ                        |
+
+## サンプルデータ・実行結果
+
+`excel-report-tool/input/` にサンプルのExcelファイルを用意しています。実行後のレポートとグラフは `excel-report-tool/output/` に出力されます。
