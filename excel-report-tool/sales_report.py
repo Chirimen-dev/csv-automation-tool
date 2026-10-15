@@ -184,6 +184,7 @@ def main():
     wb["全売上データ"].column_dimensions["D"].width = 12
     wb["全売上データ"].column_dimensions["E"].width = 14
     wb["月別売上"].column_dimensions["B"].width = 16
+    wb["商品別売上"].column_dimensions["B"].width = 16
     wb.save(report_path)
 
     write_process_report(
